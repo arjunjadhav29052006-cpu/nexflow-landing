@@ -432,80 +432,6 @@
   .price-btn-ghost { background: none; color: var(--text); border: 1px solid var(--border); }
   .price-btn-ghost:hover { border-color: var(--mid); }
 
-  /* FOUNDER BANNER */
-  .founder-section { padding: 0 40px 90px; }
-  .founder-banner {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: linear-gradient(135deg, var(--surface2), var(--surface));
-    border: 1px solid rgba(255,92,26,0.3);
-    border-radius: 10px;
-    padding: 36px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-    position: relative;
-    overflow: hidden;
-  }
-  .founder-banner::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 3px;
-    background: var(--orange);
-  }
-  .founder-tag {
-    font-family: var(--condensed);
-    font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-bottom: 8px;
-  }
-  .founder-headline {
-    font-family: var(--condensed);
-    font-weight: 900;
-    font-size: 28px;
-    text-transform: uppercase;
-    color: var(--white);
-    line-height: 1.1;
-  }
-  .founder-sub { font-size: 14px; color: var(--mid); margin-top: 8px; max-width: 460px; line-height: 1.5; }
-  .founder-slots {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-  }
-  .slot {
-    width: 32px; height: 32px;
-    border-radius: 4px;
-    border: 2px solid;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700;
-  }
-  .slot.used { border-color: var(--orange); background: var(--orange-glow); color: var(--orange); }
-  .slot.open { border-color: var(--border); color: var(--mid); }
-  .founder-action { flex-shrink: 0; text-align: center; }
-  .founder-price { font-family: var(--condensed); font-size: 42px; font-weight: 900; color: var(--white); line-height: 1; }
-  .founder-price-label { font-size: 12px; color: var(--mid); margin-bottom: 16px; }
-  .founder-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--orange);
-    color: white;
-    padding: 13px 26px;
-    border-radius: 5px;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background 0.2s;
-    white-space: nowrap;
-  }
-  .founder-cta:hover { background: var(--orange2); }
-
   /* SOCIAL PROOF */
   .proof-section { background: var(--surface); border-top: 1px solid var(--border); }
   .testimonial {
@@ -703,13 +629,6 @@
     /* Pricing */
     .pricing-grid { grid-template-columns: 1fr; }
     .price-card { padding: 24px 20px; }
-
-    /* Founder */
-    .founder-section { padding: 0 20px 60px; }
-    .founder-banner { flex-direction: column; text-align: center; padding: 28px 20px; gap: 24px; }
-    .founder-sub { max-width: 100%; }
-    .founder-slots { justify-content: center; }
-    .founder-cta { width: 100%; justify-content: center; }
 
     /* Stats */
     .stats-row { flex-direction: column; }
@@ -919,7 +838,7 @@
       </div>
       <div class="hero-clients" style="margin-top:12px;">
         <div class="client-dot"></div>
-        1 MIDC factory already live. 4 Founder slots remaining.
+        1 MIDC factory already live.
       </div>
     </div>
 
@@ -1015,7 +934,7 @@
       <div class="problem-card">
         <div class="problem-icon">📊</div>
         <div class="problem-title">CA Month-End Chaos</div>
-        <div class="problem-text">Every month: 3–4 hours hunting invoices, calculating consumption, reconciling Tally. Your CA charges for that time. It's avoidable.</div>
+        <div class="problem-text">Every month: 3–4 hours hunting invoices, calculating consumption, reconciling Tally. And if entries are missing or supplier GSTINs are wrong, the CA can't claim your ITC — you've paid that GST and can't get it back. Both problems are avoidable.</div>
       </div>
     </div>
   </div>
@@ -1052,8 +971,15 @@
       <div class="feat-card">
         <div class="feat-icon-wrap">📤</div>
         <div class="feat-info">
-          <div class="feat-title">Tally & Zoho Export</div>
-          <div class="feat-text">One click generates CA-ready CSV with HSN codes, GST rates, stock groups. Works with Tally Prime and Zoho Books out of the box.</div>
+          <div class="feat-title">CA Export — GST-Ready</div>
+          <div class="feat-text">Line-item invoice sheet, supplier GSTIN, HSN codes, CGST/SGST/IGST split, ITC + output tax summary. CA gets everything to file GSTR-1 and GSTR-3B — no data collection needed.</div>
+        </div>
+      </div>
+      <div class="feat-card" style="border-color:rgba(255,92,26,0.25);">
+        <div class="feat-icon-wrap">🔍</div>
+        <div class="feat-info">
+          <div class="feat-title">GSTR-2B Reconciliation <span style="font-size:10px;font-weight:700;background:var(--orange);color:white;padding:2px 6px;border-radius:3px;margin-left:4px;vertical-align:middle;">PRO</span></div>
+          <div class="feat-text">Upload your GSTR-2B JSON — Nexflow matches it against every GRN entry and shows matched vs blocked ITC per supplier. CA knows who to chase before the 20th. No Excel, no VLOOKUP.</div>
         </div>
       </div>
       <div class="feat-card">
@@ -1267,7 +1193,8 @@
           <li><strong style="color:var(--white);">Multi-role access</strong> — storekeeper does GRN, supervisor dispatches, owner monitors. If anyone quits, replacement is live same day.</li>
           <li><strong style="color:var(--white);">AI Copilot</strong> — ask stock questions in Marathi, create GRNs &amp; dispatches by chat. 50 queries/day.</li>
           <li><strong style="color:var(--white);">GST Invoice</strong> — professional tax invoice emailed to client automatically</li>
-          <li><strong style="color:var(--white);">CA Export</strong> — GST-ready file with GSTIN, HSN, ITC &amp; output tax summary</li>
+          <li><strong style="color:var(--white);">CA Export</strong> — line-item invoice sheet, GSTIN, HSN, ITC &amp; output tax summary. CA files GSTR-1 and GSTR-3B directly from this file.</li>
+          <li><strong style="color:var(--white);">GSTR-2B Reconciliation</strong> — upload portal JSON, see matched vs blocked ITC per supplier instantly. CA knows who to chase before the 20th filing deadline.</li>
           <li>Month-End GRN Reconciliation — catch missing entries before CA export</li>
           <li>QR Scanner (Android phone)</li>
           <li>AMC included Year 1</li>
@@ -1460,31 +1387,6 @@
   </div>
 </section>
 
-<!-- FOUNDER BANNER -->
-<div class="founder-section">
-  <div class="founder-banner">
-    <div class="founder-left">
-      <div class="founder-tag">⚡ Founding Member Offer — Last Slot</div>
-      <div class="founder-headline">Pro features.<br>Lite price.<br>1 slot left.</div>
-      <div class="founder-sub">First 5 factories get full Pro features at Lite pricing — ₹20,000 setup + ₹44,000/yr, total ₹64,000 Year 1, rate locked for 2 years. Documented in your agreement. After 5 clients — Lite: ₹76,000 Year 1 · Pro: ₹1,35,000 Year 1. Monthly: Lite ₹6,500/mo · Pro ₹11,500/mo.</div>
-      <div class="founder-slots">
-        <div class="slot used">✓</div>
-        <div class="slot used">✓</div>
-        <div class="slot used">✓</div>
-        <div class="slot used">✓</div>
-        <div class="slot open">5</div>
-      </div>
-    </div>
-    <div class="founder-action">
-      <div class="founder-price" style="font-size:clamp(22px,3vw,32px);line-height:1.2;">₹20K setup<br>+ ₹44K/yr</div>
-      <div class="founder-price-label">Pro features · Lite price · Year 1 total ₹64K · 2-year rate lock</div>
-      <a href="https://wa.me/917248932468?text=Hi%20Nexflow%2C%20I%20want%20to%20book%20a%20Founder%20slot%20for%20Nexflow%20P2." target="_blank" class="founder-cta">Book Founder Slot →</a>
-      <div style="margin-top:10px;font-size:12px;color:var(--mid);">or call <a href="tel:+917248932468" style="color:var(--orange);text-decoration:none;font-weight:600;">+91 72489 32468</a></div>
-      <div style="margin-top:8px;font-size:12px;color:var(--green);font-weight:600;">✓ Includes 7-day free trial</div>
-    </div>
-  </div>
-</div>
-
 <!-- SOCIAL PROOF -->
 <section class="proof-section">
   <div class="section-inner">
@@ -1532,7 +1434,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)"><span>What happens after Year 1?</span><span class="faq-arrow">▾</span></div>
-        <div class="faq-a">Year 2 onwards is annual subscription only — no setup fee again. AMC is included in the annual price for Pro clients. Founder clients keep their locked rate for 2 years from signup date.</div>
+        <div class="faq-a">Year 2 onwards is annual subscription only — no setup fee again. AMC is included in the annual price for Pro clients.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)"><span>What is the AI Copilot? Do I need to know how to use AI?</span><span class="faq-arrow">▾</span></div>
@@ -1542,6 +1444,10 @@
         <div class="faq-q" onclick="toggleFaq(this)"><span>Can my storekeeper use it? He's not very tech-savvy.</span><span class="faq-arrow">▾</span></div>
         <div class="faq-a">Yes. The GRN form is 3 fields. Dispatch is a form. The interface is designed for factory staff, not office software users. If someone can use a smartphone and fill a form, they can use P2.</div>
       </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>What is GSTR-2B Reconciliation and why does it matter?</span><span class="faq-arrow">▾</span></div>
+        <div class="faq-a">From July 2026, if a supplier hasn't filed their GST return, the government system automatically blocks your ITC — your CA can no longer fix this manually in GSTR-3B. You've already paid that GST to the supplier, but you can't claim it back until they file. Nexflow's GSTR-2B Reconciliation (Pro only) solves this: download the GSTR-2B JSON from the GST portal every 14th of the month, upload it to Nexflow, and the system matches it against every GRN entry instantly. Green means ITC is safe. Red means that supplier hasn't filed and your ITC is blocked. CA sees exactly who to chase before the 20th filing deadline — no Excel, no VLOOKUP, no guessing.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1550,7 +1456,7 @@
 <section class="cta-section">
   <div class="cta-inner">
     <h2 class="cta-title">Stop running your<br>factory on memory.</h2>
-    <p class="cta-sub">1 Founder slot left at Lite pricing — full Pro features, 2-year rate lock. See the live demo first. No signup, no payment.</p>
+    <p class="cta-sub">See the live demo first. No signup, no payment required.</p>
     <div class="cta-actions">
       <a href="#" onclick="openDemoModal();return false;" class="btn-hero btn-hero-primary">Open Live Demo →</a>
       <a href="https://wa.me/917248932468?text=Hi%20Nexflow%2C%20I%20saw%20Nexflow%20P2%20and%20want%20to%20know%20more." target="_blank" class="btn-hero btn-hero-ghost" style="border-color:rgba(37,211,102,0.4); color:#25d366;">
@@ -1597,7 +1503,7 @@
       <button class="demo-copy-btn" onclick="copyText('demo@nexflow', this)">Copy</button>
     </div>
     <div class="demo-modal-note">
-      This is a shared demo account with sample factory data. All features visible — GRN, Dispatch, Reports, Tally Export, and more.
+      This is a shared demo account with sample factory data. All features visible — GRN, Dispatch, Reports, CA Export, GSTR-2B Reconciliation, AI Copilot, and more.
     </div>
     <a href="https://nexflow-p2.vercel.app" target="_blank" class="demo-open-btn">Open Nexflow P2 →</a>
   </div>
