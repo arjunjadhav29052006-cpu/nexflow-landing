@@ -77,9 +77,19 @@ async function brand() {
 
 // intrinsic sizes the pages declare (width x height); phone shots are 2x
 const SIZES = { laptop: [1440, 900], phone: [780, 1688] };
+// Only the shots the pages reference are produced. Each one lists the rectangles (raw-pixel x, y, w, h) that are
+// painted over with the colour sampled at [sx, sy] before conversion: account email in the header, and the names of
+// a job-work principal that the test tenant carries (review of 22 Oct 2026; never a client or OEM name on the site).
+const USED = {
+  'dashboard-laptop': [{ x: 1170, y: 0, w: 190, h: 58, sx: 900, sy: 45 }, { x: 392, y: 598, w: 126, h: 32, sx: 700, sy: 613 }],
+  'grn-phone': [{ x: 236, y: 982, w: 440, h: 56, sx: 700, sy: 1010 }],
+  'export-laptop': [{ x: 1170, y: 0, w: 190, h: 58, sx: 900, sy: 45 }],
+  'chat-phone': [{ x: 296, y: 1658, w: 190, h: 30, sx: 600, sy: 1675 }],
+};
 async function shots(rawDir) {
-  const files = readdirSync(rawDir).filter((f) => f.endsWith('.png'));
+  const files = readdirSync(rawDir).filter((f) => f.endsWith('.png') && basename(f, '.png') in USED);
   if (!files.length) throw new Error('no png in ' + rawDir);
+  for (const name of Object.keys(USED)) if (!files.includes(name + '.png')) console.warn(`warning: ${name}.png missing in ${rawDir}`);
   mkdirSync(join(root, 'assets/shots'), { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage();
@@ -89,20 +99,38 @@ async function shots(rawDir) {
     const kind = name.endsWith('-phone') ? 'phone' : 'laptop';
     const [w, h] = SIZES[kind];
     const b64 = readFileSync(join(rawDir, f)).toString('base64');
-    const out = await page.evaluate(async ({ b64, w, h }) => {
+    const out = await page.evaluate(async ({ b64, w, h, redact }) => {
       const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode();
       const c = document.createElement('canvas'); c.width = w; c.height = h;
       const ctx = c.getContext('2d');
       // cover-fit from the top (same as the CSS object-fit: cover; object-position: top)
       const scale = Math.max(w / img.width, h / img.height);
       const dw = img.width * scale, dh = img.height * scale;
-      ctx.drawImage(img, (w - dw) / 2, 0, dw, dh);
+      const ox = (w - dw) / 2;
+      ctx.drawImage(img, ox, 0, dw, dh);
+      for (const r of redact) {
+        const [pr, pg, pb] = ctx.getImageData(Math.round(ox + r.sx * scale), Math.round(r.sy * scale), 1, 1).data;
+        ctx.fillStyle = `rgb(${pr},${pg},${pb})`;
+        ctx.fillRect(ox + r.x * scale, r.y * scale, r.w * scale, r.h * scale);
+      }
       const webp = c.toDataURL('image/webp', 0.82), jpg = c.toDataURL('image/jpeg', 0.8);
       return { webp: webp.split(',')[1], jpg: jpg.split(',')[1] };
-    }, { b64, w, h });
+    }, { b64, w, h, redact: USED[name] });
     writeFileSync(join(root, 'assets/shots', name + '.webp'), Buffer.from(out.webp, 'base64'));
     writeFileSync(join(root, 'assets/shots', name + '.jpg'), Buffer.from(out.jpg, 'base64'));
     console.log(`${name}: ${w}x${h} webp ${Math.round(out.webp.length * 0.75 / 1024)} KB, jpg ${Math.round(out.jpg.length * 0.75 / 1024)} KB`);
+    // half-size variant for phones (the hero laptop frame is ~330px wide at 360px; srcset picks this one)
+    if (kind === 'laptop') {
+      const sm = await page.evaluate(async ({ webp, w, h }) => {
+        const img = new Image(); img.src = 'data:image/webp;base64,' + webp; await img.decode();
+        const c = document.createElement('canvas'); c.width = w / 2; c.height = h / 2;
+        c.getContext('2d').drawImage(img, 0, 0, w / 2, h / 2);
+        return { webp: c.toDataURL('image/webp', 0.82).split(',')[1], jpg: c.toDataURL('image/jpeg', 0.8).split(',')[1] };
+      }, { webp: out.webp, w, h });
+      writeFileSync(join(root, 'assets/shots', name + '-sm.webp'), Buffer.from(sm.webp, 'base64'));
+      writeFileSync(join(root, 'assets/shots', name + '-sm.jpg'), Buffer.from(sm.jpg, 'base64'));
+      console.log(`${name}-sm: ${w / 2}x${h / 2} webp ${Math.round(sm.webp.length * 0.75 / 1024)} KB, jpg ${Math.round(sm.jpg.length * 0.75 / 1024)} KB`);
+    }
   }
   await browser.close();
 }

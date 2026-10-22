@@ -702,8 +702,11 @@ const I18N = {
 
   function applyLang() {
     document.documentElement.lang = lang;
-    $$('[data-i18n]').forEach((el) => { const v = t(el.dataset.i18n); if (v) el.textContent = v; });
-    $$('[data-i18n-html]').forEach((el) => { const v = t(el.dataset.i18nHtml); if (v) el.innerHTML = v; });
+    // write only when the text actually changes: rewriting the hero h1 with identical English would re-paint it
+    // after the script loads and push the page's largest-contentful-paint out by a second or more
+    const same = (a, b) => a.replace(/\s+/g, ' ').trim() === b.replace(/\s+/g, ' ').trim();
+    $$('[data-i18n]').forEach((el) => { const v = t(el.dataset.i18n); if (v && !same(el.textContent, v)) el.textContent = v; });
+    $$('[data-i18n-html]').forEach((el) => { const v = t(el.dataset.i18nHtml); if (v && !same(el.innerHTML, v)) el.innerHTML = v; });
     $$('.lang-toggle button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     $$('[data-wa]').forEach((a) => { a.href = waHref('wa.' + a.dataset.wa); });
     // P2 call-to-action: demo on WhatsApp today, free trial once self-serve ships (SITE_CONFIG.p2Cta)

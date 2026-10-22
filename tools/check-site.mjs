@@ -69,6 +69,12 @@ for (const key of Object.keys(I18N.en)) if (!used.has(key) && !key.startsWith('c
 const js = read('js/site.js');
 for (const s of ['Tata', 'KPML', 'SS Engineering', 'gmail.com']) if (js.includes(s)) fail('site.js', `forbidden string "${s}"`);
 
+// 11 every file in assets/shots is referenced by a page (nothing unreviewed ships), and every referenced shot exists
+const allHtml = Object.values(html).join('\n');
+const shotFiles = readdirSync(join(root, 'assets', 'shots')).filter((f) => /\.(webp|jpg)$/.test(f));
+for (const f of shotFiles) if (!allHtml.includes(`assets/shots/${f}`)) fail('assets/shots', `${f} is not referenced by any page`);
+for (const m of allHtml.matchAll(/assets\/shots\/([a-z0-9-]+\.(?:webp|jpg))/g)) if (!shotFiles.includes(m[1])) fail('assets/shots', `${m[1]} referenced but missing`);
+
 // 8 sitemap
 const sm = read('sitemap.xml');
 for (const p of pages) { const slug = p === 'index.html' ? '' : p.replace(/\.html$/, ''); if (!sm.includes(`https://www.nexflowautomations.in/${slug}</loc>`)) fail('sitemap.xml', `missing ${slug || '/'}`); }
